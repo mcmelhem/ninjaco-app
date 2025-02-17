@@ -1,0 +1,13 @@
+@import "../../styles/variables.scss";
+
+body {
+	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+
+
+.accordion-button:after {
+    order: -1; //swap order
+    margin-left: 0; 
+    margin-right:0.5em; // just extra space between text and icon
+}

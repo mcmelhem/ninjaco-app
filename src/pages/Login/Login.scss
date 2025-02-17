@@ -1,0 +1,91 @@
+@import "../../styles/variables.scss";
+body{
+	font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.login-container{
+	
+	border-radius: 15px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+	height: 80vh;
+}
+.login-container-img{
+	background-color: $main-color;
+	border-radius:  15px;
+}
+.login-container-text{
+	margin-top: 30px;
+	text-align: center;
+}
+.login-container-text h1{
+	color: $main-color;
+}
+.login-container-form{
+	margin-top: 20%;
+	
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.login-container-form form{
+	width: 75%;
+}
+.input-group-text{
+	color: $main-color;
+}
+.btn-submit{
+    width: fit-content;
+	font-size: 16px;
+	font-family: 'Poppins';
+	background-color: $main-color;
+	text-transform: uppercase;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0 20px;
+    margin-left: auto;
+    margin-right: auto;
+	height: 40px;
+	color: white;
+	outline: 0;
+	border: none;
+	border-radius: 15px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+	cursor: pointer;
+	transition: transform 0.1s ease, box-shadow 0.1s ease; 
+}
+/* Pointer cursor on hover */
+.btn-primary:hover {
+	background-color: $main-color;
+}
+
+/* Click effect */
+.btn-primary:active {
+	transform: scale(0.95); 
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+.forget-password {
+	width: 100%; /* Ensure it takes full width */
+	text-align: right; /* Align the link to the right */
+}
+.forget-password a {
+	font-size: 0.75rem;
+	display: inline-block; /* Ensures the link behaves like a block element */
+	color: $main-color; /* Ensures the text is visible */
+	cursor: pointer;
+}
+.wd-100{
+	width: 100%;
+}
+.dis-flex-cen{
+	display: flex;
+	justify-content: center;
+}
+.dis-flex-right{
+	display: flex;
+	justify-content: right;
+}
+

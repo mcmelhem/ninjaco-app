@@ -1,0 +1,19 @@
+@import "../../styles/variables.scss";
+
+.form-control-noborder {
+	border: none !important;
+	border-bottom: 1px solid $main-color !important;
+	border-radius: 0 !important;
+}
+
+.form-control-noborder::placeholder {
+	color: $main-color!important;
+}
+
+.form-control-noborder.css-wmy1p7-ReactDropdownSelect:focus-within  {
+	color: var(--bs-body-color) !important;
+	background-color: var(--bs-body-bg) !important;
+	border-color: $main-color!important;
+	outline: 0!important;
+	box-shadow: none !important;
+}

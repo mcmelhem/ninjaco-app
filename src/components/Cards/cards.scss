@@ -1,0 +1,40 @@
+@import "../../styles/variables.scss";
+
+body {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.card-rounded{
+    border-radius: 15px;
+}
+.img-square-wrapper{
+    background-color: $main-color;
+    border-radius: 50px;
+    border-radius: 50%;
+    width: 80px;
+    height: 70px;
+    align-self: center;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+}
+
+.card-horizontal {
+    display: flex;
+    flex: 1 1 auto;
+}
+.mainColor{
+    background-color: $main-color;
+    color: white;
+}
+
+.cardColor{
+    background-color: $main-color;
+    color: white;
+}
+.lightColor{
+    background-color:white;
+    color:$main-color;
+}

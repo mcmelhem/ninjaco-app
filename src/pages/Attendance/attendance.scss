@@ -1,0 +1,56 @@
+@import "../../styles/variables.scss";
+
+.btn-add {
+	background-color: $main-color;
+	color: white;
+	align-self: flex-end;
+}
+
+.btn-add:hover {
+	background-color: $main-color;
+	color: white;
+	align-self: flex-end;
+}
+
+.form-control-noborder {
+	border: none;
+	border-bottom: 1px solid $main-color;
+	border-radius: 0;
+}
+
+.form-control-noborder::placeholder {
+	color: $main-color;
+}
+
+.form-control-noborder:focus {
+	color: var(--bs-body-color);
+	background-color: var(--bs-body-bg);
+	border-color: $main-color;
+	outline: 0;
+	box-shadow: none !important;
+}
+
+.modal-header {
+	color: $main-color;
+	border-bottom: none;
+}
+
+.modal-title {
+	margin: 0 auto;
+}
+.modal-footer{
+	border-top: none;
+	margin: 0 auto;
+}
+.saveBtn{
+	background-color: $main-color; 
+}
+
+.seperator{
+	height: 50px;
+}
+
+.students-list{
+	list-style-type: none;
+	padding: 0px;
+}

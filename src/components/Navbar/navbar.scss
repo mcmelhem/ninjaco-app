@@ -1,0 +1,19 @@
+@import "../../styles/variables.scss";
+
+.navbar {
+  width: 100%;
+  background: white;
+  display: flex;
+  align-items: center;
+  border-bottom: 5px solid #dee2e6;
+}
+.nav-item{
+  color:#343a40;
+}
+.navbar-nav .nav-link.active{
+  color: $main-color !important;
+}
+
+.nav-link-signout{
+  color:#999c9f;
+}

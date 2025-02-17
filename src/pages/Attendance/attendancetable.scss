@@ -1,0 +1,17 @@
+@import "../../styles/variables.scss";
+
+.subrow{
+	background-color: $main-color;
+	color: white !important;
+	border: 1px solid white;
+}
+
+.collapsibleRow{
+	background-color:  rgb(231 232 246 / 22%);
+	color: black;
+}
+
+.mainRow{
+	background-color:  #35538894;
+	color: white!important;
+}

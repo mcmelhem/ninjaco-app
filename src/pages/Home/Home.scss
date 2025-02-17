@@ -1,0 +1,269 @@
+@import "../../styles/variables.scss";
+
+body {
+	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.form-control-noborder{
+	border: none;
+	border-bottom: 1px solid $main-color;
+	border-radius: 0;
+}
+.form-control-noborder::placeholder {
+	color: $main-color; 
+  }
+  .form-control-noborder:focus {
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+    border-color: $main-color; 
+    outline: 0;
+    box-shadow: none !important;
+}
+.modal-header{
+	color: $main-color; 
+	border-bottom: none;
+}
+.modal-title {
+	margin: 0 auto;
+}
+.modal-footer{
+	border-top: none;
+	margin: 0 auto;
+}
+.saveBtn{
+	background-color: $main-color; 
+}
+.font-size-sm {
+	font-size: 9px;
+}
+
+.font-size-md {
+	font-size: 18px;
+}
+
+.font-size-lg {
+	font-size: 36px;
+	line-height: normal;
+}
+
+.home-container {
+	border-radius: 15px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+	height: 90vh;
+}
+
+.menuContainer {
+	width: 10%;
+	background-color: $main-color;
+	border-radius: 0 10px 10px 0px;
+}
+
+.card-main-color {
+	background-color: $main-color;
+	color: white;
+}
+
+.card-balance {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.card-balance span {
+	line-height: normal;
+}
+
+.balance-title {
+	display: flex;
+	flex-direction: column;
+
+}
+
+.balance-insights {
+	margin-left: auto;
+	display: flex;
+	flex-direction: column;
+}
+
+.balance-value {
+	color: white;
+	background-color: $second-color;
+	margin: 2px;
+	border-radius: 15px;
+	text-align: center;
+	padding-left: 10px;
+	padding-right: 10px;
+
+}
+
+.list-items {
+	list-style-type: none;
+	padding: 0px;
+}
+
+list-item-balance {
+	display: flex;
+	flex-direction: row;
+}
+
+.list-item-values {
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 15px;
+}
+
+.btn-balance {
+	margin-left: 20px;
+	color: white;
+	align-self: flex-end;
+}
+
+/**unpaid balances**/
+.view-unpaidbalance-btn {
+	float: right;
+	color: white;
+}
+
+/**stats*/
+.img-square-wrapper {
+	background-color: $main-color;
+	border-radius: 50px;
+	border-radius: 50%;
+	width: 80px;
+	height: 70px;
+	align-self: center;
+	text-align: center;
+	align-content: center;
+	align-items: center;
+	border-radius: 50%;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	align-self: self-start;
+}
+
+.card-statistics {
+	display: flex;
+	flex-direction: row;
+}
+
+.card-statistics-content {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.card-statistics-value {
+	font-weight: 600;
+}
+
+.list-items-schedule {
+	padding: 0px;
+}
+
+.schedule-today {
+	color: $main-color;
+	float: right;
+}
+
+.schedule-footer {
+	display: flex;
+	flex-direction: row;
+	margin-left: auto;
+}
+
+/*.students-progress {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 2px;
+}
+
+.students-progress .progress {
+	flex: 1;
+}
+*/
+/*growth*/
+.card-growth-title {
+	display: flex;
+	flex-direction: row;
+
+}
+
+.growth-filter-btn {
+	margin-left: auto;
+	color: black;
+}
+
+.growth-progress {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+}
+
+.growth-progress-values {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 2px;
+	flex: 0 0 70%;
+}
+
+.growth-progress-values .progress {
+	flex: 1;
+}
+
+.growth-value {
+	margin-left: auto;
+}
+
+.maingrid {
+	display: grid;
+	grid-template-columns: repeat(3, auto);
+	grid-template-rows: repeat(2, auto);
+}
+
+.card-statistics {
+	height: 170px;
+	;
+}
+
+.balance {
+	height: 370px;
+}
+
+.balance>div {
+	height: 100%;
+}
+
+.schedule {
+	height: 370px;
+}
+
+.unpaid-balances {
+	height: 370px;
+}
+
+.unpaid-balances>div {
+	height: 100%;
+}
+
+.growth {
+	height: 370px;
+}
+
+.growth>div {
+	height: 100%;
+}
+
+.btn-addevent {
+	margin-left: auto;
+}
+
+.sorting-dropdown {
+	margin-left: auto;
+}
+
+.sorting-dropdown .form-select {
+	background-color: grey;
+}
