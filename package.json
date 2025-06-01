@@ -10,8 +10,11 @@
     "@fortawesome/free-regular-svg-icons": "^6.7.1",
     "@fortawesome/free-solid-svg-icons": "^6.7.1",
     "@fortawesome/react-fontawesome": "^0.2.2",
-    "@mui/material": "^6.3.1",
-    "@mui/x-data-grid": "^7.24.1",
+    "@mui/material": "^5.17.1",
+    "@mui/styled-engine-sc": "^7.1.0",
+    "@mui/styles": "^6.4.8",
+    "@mui/system": "^5.17.1",
+    "@mui/x-data-grid": "^8.4.0",
     "@mui/x-data-grid-generator": "^7.24.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -30,6 +33,9 @@
     "sass": "^1.81.0",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.5",
+    "styled-components": "^6.1.18",
+    "stylis": "^4.3.6",
+    "stylis-plugin-rtl": "^2.1.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

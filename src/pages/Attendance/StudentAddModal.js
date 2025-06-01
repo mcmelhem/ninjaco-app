@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Form, Modal, Button } from 'react-bootstrap';
 import DropDown from '../../components/DropDown/CustomDropDown';
 
-const StudentAttendance = ({ isOpen, onClose, title }) => {
-
+const StudentAddModal = ({ isOpen, onClose, title, addStudentData }) => {
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     firstname: '',
     lastname: '',
@@ -12,23 +12,15 @@ const StudentAttendance = ({ isOpen, onClose, title }) => {
     level: '',
     parent: '',
     phone: '',
-    amount: ''
+    section: ''
   });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form Data:', formData);
-
-  };
-  const clearForm = () => {
+    /* if (formData.day == '' || formData.time == '') {
+         setError('All fields are required!');
+         return;
+     }*/
+    addStudentData(formData);
     setFormData({
       firstname: '',
       lastname: '',
@@ -37,8 +29,24 @@ const StudentAttendance = ({ isOpen, onClose, title }) => {
       level: '',
       parent: '',
       phone: '',
-      amount: ''
+      section: ''
     });
+    onClose();
+  };
+
+  const handleCancel = () => {
+    setFormData({
+      firstname: '',
+      lastname: '',
+      course: '',
+      package: '',
+      level: '',
+      parent: '',
+      phone: '',
+      section: ''
+    });
+    setError('');
+    onClose();
   };
   return (
     <>
@@ -55,8 +63,8 @@ const StudentAttendance = ({ isOpen, onClose, title }) => {
                   name="firstname"
                   className="form-control-noborder"
                   value={formData.firstname}
-                  onChange={handleChange}
                   placeholder="First Name"
+                  onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
                 />
               </Form.Group>
 
@@ -66,8 +74,8 @@ const StudentAttendance = ({ isOpen, onClose, title }) => {
                   name="lastname"
                   className="form-control-noborder"
                   value={formData.lastname}
-                  onChange={handleChange}
                   placeholder="Last Name"
+                  onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
                 />
               </Form.Group>
 
@@ -78,18 +86,20 @@ const StudentAttendance = ({ isOpen, onClose, title }) => {
                   id="course"
                   getAPIData={false}
                   strAPIName=""
-                  onSelect={(selectedValue) => setFormData({ ...formData, course: selectedValue })}  // Update instructor in formData
+                  arxData={[{ "id": -1, "name": "course" }]}
+                  onSelect={(selectedValue) => setFormData({ ...formData, course: selectedValue })}
                 />
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="package">
-              <DropDown
+                <DropDown
                   defaultOption="Package"
                   className="form-control-noborder form-control"
-                  id="course"
+                  id="package"
                   getAPIData={false}
                   strAPIName=""
-                  onSelect={(selectedValue) => setFormData({ ...formData, package: selectedValue })}  // Update instructor in formData
+                  arxData={[{ "id": -1, "name": "package" }]}
+                  onSelect={(selectedValue) => setFormData({ ...formData, package: selectedValue })}
                 />
               </Form.Group>
 
@@ -99,20 +109,22 @@ const StudentAttendance = ({ isOpen, onClose, title }) => {
                   name="level"
                   className="form-control-noborder"
                   value={formData.level}
-                  onChange={handleChange}
                   placeholder="Level"
+
+                  onChange={(e) => setFormData({ ...formData, level: e.target.value })}
                 />
               </Form.Group>
 
               <div className='seperator'></div>
-              <Form.Group className="mb-3" controlId="amount">
-                <Form.Control
-                  type="text"
-                  name="amount"
-                   className="form-control-noborder"
-                  value={formData.amount}
-                  onChange={handleChange}
-                  placeholder="Amount"
+              <Form.Group className="mb-3" controlId="section">
+                <DropDown
+                  defaultOption="Section"
+                  className="form-control-noborder form-control"
+                  id="section"
+                  getAPIData={false}
+                  strAPIName=""
+                  arxData={[{ "id": -1, "name": "section" }]}
+                  onSelect={(selectedValue) => setFormData({ ...formData, section: selectedValue })}
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="parent">
@@ -121,8 +133,8 @@ const StudentAttendance = ({ isOpen, onClose, title }) => {
                   className="form-control-noborder"
                   name="parent"
                   value={formData.parent}
-                  onChange={handleChange}
                   placeholder="Parent Name"
+                  onChange={(e) => setFormData({ ...formData, parent: e.target.value })}
                 />
               </Form.Group>
 
@@ -132,13 +144,10 @@ const StudentAttendance = ({ isOpen, onClose, title }) => {
                   name="phone"
                   className="form-control-noborder"
                   value={formData.phone}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   placeholder="Phone Number"
                 />
               </Form.Group>
-
-            
-
             </Form>
           </div>
         </Modal.Body>
@@ -146,7 +155,7 @@ const StudentAttendance = ({ isOpen, onClose, title }) => {
           <Button className='saveBtn' onClick={handleSubmit}>
             Submit
           </Button>
-          <Button variant="secondary" className='cancelBtn' onClick={onClose}>
+          <Button variant="secondary" className='cancelBtn' onClick={handleCancel}>
             Cancel
           </Button>
         </Modal.Footer>
@@ -155,4 +164,4 @@ const StudentAttendance = ({ isOpen, onClose, title }) => {
   );
 };
 
-export default StudentAttendance;
+export default StudentAddModal;

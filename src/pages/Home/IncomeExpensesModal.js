@@ -4,16 +4,14 @@ import DropDown from '../../components/DropDown/CustomDropDown';
 import DatePicker from '../../components/Date/CustomDate';
 
 const IncomeExpensesModal = ({ isOpen, onClose, title }) => {
-
-    // Step 1: Consolidate form fields into a single state
     const [formData, setFormData] = useState({
         amount: '',
         date: new Date(),
-        source: '',
+        category: '',
+        subcategory: '',
         description: ''
     });
 
-    // Step 2: Handle form input changes and update respective fields in formData
     const handleChange = (e) => {
         const { name, value } = e.target;
 
@@ -23,20 +21,20 @@ const IncomeExpensesModal = ({ isOpen, onClose, title }) => {
         });
     };
 
-    // Step 3: Handle save function and log formData
     const handleSubmit = () => {
-        console.log("Form Data: ", formData); // You can send this data to an API
+        console.log("Form Data: ", formData);
 
         clearForm();
         onClose();
     };
 
-    // Step 4: Clear the form data after save
+
     const clearForm = () => {
         setFormData({
             amount: '',
             date: new Date(),
-            source: '',
+            category: '',
+            subcategory: '',
             description: ''
         });
     };
@@ -72,19 +70,28 @@ const IncomeExpensesModal = ({ isOpen, onClose, title }) => {
                                 />
                             </Form.Group>
 
-                            {/* Payment Source Dropdown */}
-                            <Form.Group className="mb-3" controlId="source">
+
+                            <Form.Group className="mb-3" controlId="category">
                                 <DropDown
-                                    defaultOption="Source"
+                                    defaultOption="Category"
                                     className="form-control-noborder form-control"
-                                    id="source"
+                                    id="category"
                                     getAPIData={true}
                                     strAPIName="GetIncomeSource"
-                                    onSelect={(selectedValue) => setFormData({ ...formData, source: selectedValue })}  // Update the source in formData
+                                    onSelect={(selectedValue) => setFormData({ ...formData, category: selectedValue })}  // Update the category in formData
                                 />
                             </Form.Group>
 
-                            {/* Description Field */}
+                            <Form.Group className="mb-3" controlId="subcategory">
+                                <DropDown
+                                    defaultOption="Subcategory"
+                                    className="form-control-noborder form-control"
+                                    id="category"
+                                    getAPIData={true}
+                                    strAPIName="GetIncomeSource"
+                                    onSelect={(selectedValue) => setFormData({ ...formData, subcategory: selectedValue })}  // Update the category in formData
+                                />
+                            </Form.Group>
                             <Form.Group className="mb-3" controlId="description">
                                 <Form.Control
                                     className="form-control-noborder"
@@ -100,11 +107,11 @@ const IncomeExpensesModal = ({ isOpen, onClose, title }) => {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    {/* Save Button */}
+
                     <Button className='saveBtn' onClick={handleSubmit}>
                         Submit
                     </Button>
-                    {/* Cancel Button */}
+
                     <Button variant="secondary" className='cancelBtn' onClick={onClose}>
                         Cancel
                     </Button>

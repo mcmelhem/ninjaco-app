@@ -4,10 +4,38 @@ body {
 	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-
-
 .accordion-button:after {
     order: -1; //swap order
     margin-left: 0; 
     margin-right:0.5em; // just extra space between text and icon
+}
+
+
+.add-row-btn{
+    background-color:$main-color;
+    font-size:  12px;
+    width: 30px;
+    height: 32px;
+    border: 2px solid #537bc3;
+}
+.grid-btn{
+    font-size:  13px;
+    color: $main-color !important;
+}
+.database-tabs{
+    border: none !important;
+}
+.database-tabs .nav-link.active{
+    color: $main-color !important;
+    border: none;
+    border-bottom: 3px solid #ffc107 !important
+}
+.database-tabs .nav-link{
+    color: #00000085;
+}
+.save-btn{
+    background-color:$main-color;
+}
+.modal-courses-title{
+    margin:0px !important;
 }

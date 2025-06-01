@@ -1,0 +1,52 @@
+@import "../../styles/variables.scss";
+
+.search-btn{
+    background-color:$main-color;
+}
+.save-btn{
+    background-color:$main-color;
+}
+.error-row .MuiDataGrid-cell--editing{
+    border: 1.8px solid #ff00008a;
+    border-radius: 5px;
+}
+.save-grid-btn{
+    background-color:$main-color;
+    font-size:  13px;
+}
+
+.add-row-btn{
+    background-color:$main-color;
+    font-size:  12px;
+    width: 30px;
+    height: 32px;
+    border: 2px solid #537bc3;
+}
+.grid-btn{
+    font-size:  13px;
+    color: $main-color !important;
+}
+
+.payment-tabs .nav-link.active{
+    color: $main-color !important;
+    border: none;
+    border-bottom: 3px solid #ffc107 !important
+}
+.payment-tabs{
+    border: none !important;
+}
+.payment-tabs .nav-link{
+    color: #00000085;
+}
+.centers-payment-info{
+    background: rgb(224 224 224 / 32%);
+    padding: 10px;
+    border-radius: 15px;
+    border: 1px solid #537bc3 !important;
+}
+.search-criteria{
+    background-color: #f8f9fa99;
+    border-radius: 15px;
+    padding: 5px;
+    margin-bottom: 5px;  
+}

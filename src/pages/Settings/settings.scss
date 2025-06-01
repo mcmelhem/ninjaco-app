@@ -27,7 +27,17 @@ body {
 	background-color: rgb(231 232 246 / 22%);
 	border-radius: 25px;
 }
-
+.add-row-btn{
+    background-color:$main-color;
+    font-size:  12px;
+    width: 30px;
+    height: 32px;
+    border: 2px solid #537bc3;
+}
+.grid-btn{
+    font-size:  13px;
+    color: $main-color !important;
+}
 .settings-text {
 	font-size: 25px;
 	color: $main-color;
@@ -56,4 +66,25 @@ body {
     margin-bottom: 5px;
     margin-top: 5px;
     padding: 10px;
+}
+
+.settings-nav .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: var(--bs-nav-pills-link-active-color);
+    background-color: #537bc3 !important;
+}
+.settings-nav .nav-link.active{
+    background-color: #537bc3 !important;
+}
+#granted-MenuAccess{
+	background-color: #fafafd;
+}
+.save-btn-float{
+   position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.menu-items{
+    position: relative;
+
 }

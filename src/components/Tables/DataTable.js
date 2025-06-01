@@ -231,7 +231,6 @@ function SetColumns(jsonRow){
   return columns;
 }
   return (
-    
     <Box
       sx={{
         height: 500,
@@ -244,7 +243,6 @@ function SetColumns(jsonRow){
         },
       }}
     >
-    
       <DataGrid
         autoHeight
         rows={rows}
@@ -258,10 +256,8 @@ function SetColumns(jsonRow){
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-      />
-     
+        showToolbar />
     </Box>
-   
   );
 }
 export default  DataTable;

@@ -12,123 +12,21 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faAngleUp, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { Row, Col, Form, Button} from 'react-bootstrap';
+import AttendancePaymentModal from './AttendancePaymentModal';
 import './attendancetable.scss';
 
-function createData(
-  id,
-  name,
-  total,
-  level,
-  progress,
-  course,
-  packages,
-  session,
-  paid,
-  discount,
-  remaining,
-  lastpayment,
-  status,
-  hist
-) {
-  return {
-    id,
-    name,
-    total,
-    level,
-    progress,
-    course,
-    packages,
-    session,
-    paid,
-    discount,
-    remaining,
-    lastpayment,
-    status,
-    history: hist,
-  };
-}
-const rows = [
-  createData(1, "Jad Daoud", "56", "Level 6", "6/10", "Lego EV3", "4 sessions", "2/4", "0$", "0$", "0$", "2024-10-10", "Needs to pay", [
-
-
-    "1/1/11",
-    "4/1/11",
-    "5/1/11",
-    "1/1/11",
-    "4/1/11",
-    "5/1/11",
-    "1/1/11",
-    "4/1/11",
-    "5/1/11",
-    "4/1/11",
-    "5/1/11",
-    "5/1/11",
-    "5/1/11",
-    "5/1/11"
-  ]),
-  createData(2, "Jad Daoud", "56", "Level 6", "6/10", "Lego EV3", "4 sessions", "2/4", "0$", "0$", "0$", "2024-10-10", "Needs to pay", [
-
-
-    "1/1/11",
-    "4/1/11",
-    "5/1/11",
-    "1/1/11",
-    "4/1/11",
-    "5/1/11",
-    "1/1/11",
-    "4/1/11",
-    "5/1/11",
-    "4/1/11",
-    "5/1/11"
-
-
-  ]),
-  createData(3, "Jad Daoud", "56", "Level 6", "6/10", "Lego EV3", "4 sessions", "2/4", "0$", "0$", "0$", "2024-10-10", "Needs to pay", [
-
-
-    "1/1/11",
-    "4/1/11",
-    "5/1/11",
-    "1/1/11",
-    "4/1/11",
-    "5/1/11",
-    "1/1/11",
-    "4/1/11",
-    "5/1/11",
-    "4/1/11",
-    "5/1/11"
-
-
-  ]),
-  createData(4, "Jad Daoud", "56", "Level 6", "6/10", "Lego EV3", "4 sessions", "2/4", "0$", "0$", "0$", "2024-10-10", "Needs to pay", [
-
-
-    "1/1/11",
-    "4/1/11",
-    "5/1/11",
-    "1/1/11",
-    "4/1/11",
-    "5/1/11",
-    "1/1/11",
-    "4/1/11",
-    "5/1/11",
-    "4/1/11",
-    "5/1/11"
-
-
-  ])
-];
-const columns = [
-  "id", "Name", "Total", "Level", "Progress", "Course", "Packages", "Session",
-  "Paid", "Discount", "Remaining", "Last Payment", "Status",
-];
-const subcolumns = ["date", "Customer"];
 
 function RowTable(props) {
-  const { row } = props;
-  const [open, setOpen] = React.useState(false);
-
+  const { row, columns, subColumns } = props;
+  const [open, setOpen] = useState(false);
+ const [isAttendancePaymentModalOpen, setisAttendancePaymentModalOpen] = useState(false);
+ const [modalTitle, setModalTitle] = useState('');
+ const changeAttendance = (blnShowModal) => {
+  setModalTitle('Modify');
+  setisAttendancePaymentModalOpen(blnShowModal);
+}
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
@@ -144,8 +42,18 @@ function RowTable(props) {
               <FontAwesomeIcon icon={faAngleDown} />
             )}
           </IconButton>
+          <Button
+            aria-label="add payment"
+            size="small"
+            onClick={() => changeAttendance(true)}
+            className= "btn-addpayment btn ms-1"
+          >
+           <FontAwesomeIcon icon={faPlus} />  Payment
+          </Button>
+           <AttendancePaymentModal rowModify = {row} isOpen={isAttendancePaymentModalOpen} onClose={() => changeAttendance(false)} title={modalTitle}> 
+           </AttendancePaymentModal>
         </TableCell>
-
+      
         {Object.keys(row).map((key) => {
           if (typeof row[key] === "string") {
             return key === "name" ? (
@@ -185,7 +93,73 @@ function RowTable(props) {
   );
 }
 
-const AttendanceTable = (props) => {
+const AttendanceTable = ({example}) => {
+  const [columns, setColumns] = useState([]);
+  const [subColumns, setSubColumns] = useState([]);
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = {
+        columns: ["id", "Name", "Total", "Level", "Progress", "Course", "Packages", "Session", "Paid", "Discount", "Remaining", "Last Payment", "Status"],
+        subColumns: [
+          { label: "Attendance Report" },
+          { label: "Needs Certificate" }
+        ],
+        rows: [
+          {
+            id: 1,
+            name: "Jad Daoud",
+            total: "56",
+            level: "Level 6",
+            progress: "6/10",
+            course: "Lego EV3",
+            packages: "4 sessions",
+            session: "2/4",
+            paid: "0$",
+            discount: "0$",
+            remaining: "0$",
+            lastpayment: "2024-10-10",
+            status: "Needs to pay",
+            history: [
+              "1/1/11", "4/1/11", "5/1/11", "1/1/11", "4/1/11", "5/1/11",
+              "1/1/11", "4/1/11", "5/1/11", "4/1/11", "5/1/11", "5/1/11"
+            ]
+          },
+          {
+            id: 2,
+            name: "MC",
+            total: "56",
+            level: "Level 6",
+            progress: "6/10",
+            course: "Lego EV3",
+            packages: "4 sessions",
+            session: "2/4",
+            paid: "0$",
+            discount: "0$",
+            remaining: "0$",
+            lastpayment: "2024-10-10",
+            status: "Needs to pay",
+            history: [
+              "1/1/11", "4/1/11", "5/1/11", "1/1/11", "4/1/11", "5/1/11",
+              "1/1/11", "4/1/11", "5/1/11", "4/1/11", "5/1/11", "5/1/11"
+            ]
+          },
+         
+        ]
+      };
+      setColumns(response.columns);
+      setSubColumns(response.subColumns);
+      setRows(response.rows);
+    };
+   
+    if(example == true){
+      fetchData();
+    }
+
+    
+  }, []);
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">

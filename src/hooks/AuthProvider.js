@@ -42,7 +42,7 @@ const AuthProvider = ({ children }) => {
             });
         } */
       
-        navigate("/");
+        navigate("/home");
         return;
       }
       throw new Error(res.message);
@@ -61,10 +61,11 @@ const AuthProvider = ({ children }) => {
   };
 
   const logOut = () => {
+    navigate("/login");
     setUser(null);
     setToken("");
-    localStorage.removeItem("site");
-    navigate("/login");
+    localStorage.removeItem("loggedinUser");
+    
   };
   return (
     <AuthContext.Provider value={{ token, user, logIn, logOut }}>

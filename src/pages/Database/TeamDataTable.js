@@ -1,11 +1,11 @@
-import React, {useEffect, useState } from 'react';
-import Box from '@mui/material/Box';
+import React, { useEffect, useState } from 'react';
+import { Row, Col, Form, Button } from 'react-bootstrap';
 import axios from "axios";
 import { API_BASE_URL, ACCESS_TOKEN_NAME } from '../../constants/constants';
-import Button from '@mui/material/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {  faPlus, faPen, faTrash, faSave, faCancel } from '@fortawesome/free-solid-svg-icons';
-import {GridRowModes, DataGrid, GridToolbarContainer, GridActionsCellItem, GridRowEditStopReasons} from '@mui/x-data-grid';
+import { faSearch, faPlus, faPen, faTrash, faSave, faCancel } from '@fortawesome/free-solid-svg-icons';
+import { GridRowModes, DataGrid, GridToolbarContainer, GridActionsCellItem, GridRowEditStopReasons } from '@mui/x-data-grid';
+import DropDown from '../../components/DropDown/CustomDropDown';
 
 var initialRows = [
   {
@@ -14,10 +14,11 @@ var initialRows = [
     "lastname": "Doe",
     "phoneNumber": "+1-555-1234",
     "position": "Instructor",
-    "rateAmountType": "Per Day",
-    "rateAmount": "$200",
+    "perday": "10",
+    "persession": "20",
     "fuelRate": "Per km",
-    "location": "New York"
+    "location": "New York",
+    "coordinates": ""
   },
   {
     "id": 2,
@@ -25,10 +26,11 @@ var initialRows = [
     "lastname": "Smith",
     "phoneNumber": "+1-555-5678",
     "position": "Supervisor",
-    "rateAmountType": "Per session",
-    "rateAmount": "$50",
+    "perday": "10",
+    "persession": "20",
     "fuelRate": "Fixed per day",
-    "location": "Los Angeles"
+    "location": "Los Angeles",
+    "coordinates": ""
   },
   {
     "id": 3,
@@ -36,10 +38,11 @@ var initialRows = [
     "lastname": "Johnson",
     "phoneNumber": "+1-555-8765",
     "position": "Instructor",
-    "rateAmountType": "Per Day",
-    "rateAmount": "$180",
+    "perday": "10",
+    "persession": "20",
     "fuelRate": "Per km",
-    "location": "Chicago"
+    "location": "Chicago",
+    "coordinates": ""
   },
   {
     "id": 4,
@@ -47,10 +50,11 @@ var initialRows = [
     "lastname": "Davis",
     "phoneNumber": "+1-555-4321",
     "position": "Supervisor",
-    "rateAmountType": "Site Visit",
-    "rateAmount": "$100",
+    "perday": "10",
+    "persession": "20",
     "fuelRate": "Fixed per day",
-    "location": "Houston"
+    "location": "Houston",
+    "coordinates": ""
   },
   {
     "id": 5,
@@ -58,10 +62,11 @@ var initialRows = [
     "lastname": "Brown",
     "phoneNumber": "+1-555-6789",
     "position": "Instructor",
-    "rateAmountType": "Per session",
-    "rateAmount": "$75",
+    "perday": "10",
+    "persession": "20",
     "fuelRate": "Per km",
-    "location": "Miami"
+    "location": "Miami",
+    "coordinates": ""
   },
   {
     "id": 6,
@@ -69,10 +74,11 @@ var initialRows = [
     "lastname": "Wilson",
     "phoneNumber": "+1-555-2345",
     "position": "Supervisor",
-    "rateAmountType": "Per Day",
-    "rateAmount": "$250",
+    "perday": "10",
+    "persession": "20",
     "fuelRate": "Fixed per day",
-    "location": "Seattle"
+    "location": "Seattle",
+    "coordinates": ""
   },
   {
     "id": 7,
@@ -80,62 +86,49 @@ var initialRows = [
     "lastname": "Taylor",
     "phoneNumber": "+1-555-9876",
     "position": "Instructor",
-    "rateAmountType": "Site Visit",
-    "rateAmount": "$120",
+    "perday": "10",
+    "persession": "20",
     "fuelRate": "Per km",
-    "location": "Boston"
+    "location": "Boston",
+    "coordinates": ""
   }
 ];
 
 
 
-function EditToolbar(props) {
-  const { setRows, setRowModesModel } = props;
 
-  const handleClick = () => {
-    const id = 1;
-    setRows((oldRows) => [
-      ...oldRows,
-      { id, name: '', age: '', role: '', isNew: true },
-    ]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-    }));
-  };
-
-  return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<FontAwesomeIcon icon={faPlus} /> } onClick={handleClick}>
-        Add record
-      </Button>
-    </GridToolbarContainer>
-  );
-}
-const TeamDataTable = ({id, getAPIData, strAPIName })=> {
-  const [rows, setRows] = useState([]);
+const TeamDataTable = ({ id, getAPIData, strAPIName }) => {
+  const [rows, setRows] = useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState({});
+  const [errorRows, setErrorRows] = useState([]);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    location: "",
+    persession: "",
+    perday: "",
+    fuelRate: ""
+  });
 
   useEffect(() => {
-    if(getAPIData == true){
-    const token = localStorage.getItem("loggedinUser");
-    axios.get( API_BASE_URL + '/api/'+ strAPIName, {
-    headers: {
-       Authorization: `Bearer ${token}`
-      },
-
-    }).then((response) => {
-          if(response.hasOwnProperty("data")== true){
-           var data = response.data;
-           setRows(data);
-           
-          }
-        })
+    if (getAPIData) {
+      const token = localStorage.getItem("loggedinUser");
+      axios.get(API_BASE_URL + '/api/' + strAPIName, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      }).then((response) => {
+        if (response.hasOwnProperty("data")) {
+          const data = response.data;
+          setRows(data);
+        }
+      })
         .catch((error) => {
           console.error("Error fetching user", error);
         });
-      }
-}, []);
+    }
+  }, [getAPIData, strAPIName]);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -169,148 +162,332 @@ const TeamDataTable = ({id, getAPIData, strAPIName })=> {
 
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    return updatedRow;
+    if (
+      !newRow.firstname ||
+      !newRow.lastname ||
+      !newRow.phoneNumber ||
+      !newRow.position ||
+      !newRow.perday ||
+      !newRow.persession ||
+      !newRow.fuelRate ||
+      !newRow.location ||
+      !newRow.coordinates
+    ) {
+      alert('Please Fill Required Fields');
+      setErrorRows(newRow);
+      return null;
+    } else {
+      setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+      return updatedRow;
+    }
   };
+
 
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
+  const getRowClassName = (params) => {
+    if (errorRows && errorRows.id == params.id) {
+      return 'error-row';
+    }
+    return '';
+  };
+  const handleSearch = () => {
+    var filteredRows = initialRows.filter((row) => {
+      const matchesFirstName =
+        formData.firstName ? row.firstName.toLowerCase().includes(formData.firstName.toLowerCase()) : true;
+      const matchesLastName =
+        formData.lastName ? row.lastName.toLowerCase().includes(formData.lastName.toLowerCase()) : true;
+      const matchesPhoneNumber =
+        formData.phoneNumber ? row.phoneNumber.toLowerCase().includes(formData.phoneNumber.toLowerCase()) : true;
+      const matchesLocation =
+        formData.location ? row.location.toLowerCase().includes(formData.location.toLowerCase()) : true;
+      const matchesPersession =
+        formData.persession ? row.persession == formData.persession : true;
+      const matchesPerday =
+        formData.perday ? row.perday == formData.perday : true;
+      const matchesFuelRate =
+        formData.fuelRate.name ? row.fuelRate.toLowerCase().includes(formData.fuelRate.name.toLowerCase()) : true;
 
+      return (
+        matchesFirstName &&
+        matchesLastName &&
+        matchesPhoneNumber &&
+        matchesLocation &&
+        matchesPersession &&
+        matchesPerday &&
+        matchesFuelRate
+      );
+    });
 
-function SetColumns(jsonRow){
-  const columns = [];
-  var actionsColumn = {
-    field: 'actions',
-    type: 'actions',
-    headerName: 'Actions',
-    width: 100,
-    cellClassName: 'actions',
-    getActions: ({ id }) => {
-      const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-      if (isInEditMode) {
+    if (filteredRows.length !== 0) {
+      setRows(filteredRows);
+    }
+  };
+  const handleAddClick = () => {
+    const maxId = Math.max(...rows.map(row => row.id), 0);
+    const newId = maxId + 1;
+    const newRow = {
+      "firstName": "",
+      "lastName": "",
+      "phoneNumber": "",
+      "location": "",
+      "coordinates": "",
+      "perday": "",
+      "persession": "",
+      "fuelRate": " ",
+      "id": newId,
+      "isNew": true
+    };
+    setRows((oldRows) => [
+      ...oldRows,
+      newRow,
+    ]);
+    setRowModesModel((oldModel) => ({
+      ...oldModel,
+      [newId]: { mode: GridRowModes.Edit, fieldToFocus: 'firstName' },
+    }));
+  };
+  const columns = [
+    {
+      field: 'add',
+      type: 'add',
+      headerName: '',
+      width: 10,
+      renderHeader: () => (
+        <Button className='add-row-btn p-1' title='Add' onClick={handleAddClick}><FontAwesomeIcon icon={faPlus} /></Button>
+      ),
+      filterable: false,
+      disableColumnMenu: true,
+      sortable: false,
+
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
+      width: 100,
+      cellClassName: 'actions',
+      getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<FontAwesomeIcon icon={faSave} />}
+              label="Save"
+              className="grid-btn"
+              onClick={handleSaveClick(id)}
+            />,
+            <GridActionsCellItem
+              icon={<FontAwesomeIcon icon={faCancel} />}
+              label="Cancel"
+              className="grid-btn"
+              onClick={handleCancelClick(id)}
+              color="inherit"
+            />,
+          ];
+        }
+
         return [
           <GridActionsCellItem
-            icon={ <FontAwesomeIcon icon={faSave} /> }
-            label="Save"
-            sx={{
-              color: 'primary.main',
-            }}
-            onClick={handleSaveClick(id)}
+            icon={<FontAwesomeIcon icon={faPen} />}
+            label="Edit"
+            className="grid-btn"
+            onClick={handleEditClick(id)}
+            color="inherit"
           />,
           <GridActionsCellItem
-            icon={<FontAwesomeIcon icon={faCancel} /> }
-            label="Cancel"
-            className="textPrimary"
-            onClick={handleCancelClick(id)}
+            icon={<FontAwesomeIcon icon={faTrash} />}
+            label="Delete"
+            className="grid-btn"
+            onClick={handleDeleteClick(id)}
             color="inherit"
           />,
         ];
-      }
-
-      return [
-        <GridActionsCellItem
-          icon={ <FontAwesomeIcon icon={faPen} /> }
-          label="Edit"
-          className="textPrimary"
-          onClick={handleEditClick(id)}
-          color="inherit"
-        />,
-        <GridActionsCellItem
-          icon={ <FontAwesomeIcon icon={faTrash} /> }
-          label="Delete"
-          onClick={handleDeleteClick(id)}
-          color="inherit"
-        />,
-      ];
+      },
     },
-  }
-  actionsColumn["headerClassName"]= 'mainrow';
-   columns.push(actionsColumn);
-   
-   var column = {};
-   
-   column["field"] = "firstname";
-   column["headerName"] = "First Name";
-   column["width"] = 180;
-   column["editable"] = true;
-   column["headerClassName"] = 'mainrow';
-   columns.push(column);
-   
-   column = {};
-   column["field"] = "lastname";
-   column["headerName"] = "Last Name";
-   column["width"] = 180;
-   column["editable"] = true;
-   column["headerClassName"] = 'mainrow';
-   columns.push(column);
-   
-   column = {};
-   column["field"] = "phoneNumber";
-   column["headerName"] = "Phone Number";
-   column["width"] = 180;
-   column["editable"] = true;
-   column["headerClassName"] = 'mainrow';
-   columns.push(column);
-   
-   column = {};
-   column["field"] = "position";
-   column["headerName"] = "Position";
-   column["width"] = 180;
-   column["editable"] = true;
-   column["headerClassName"] = 'mainrow';
-   columns.push(column);
-   
-  
-   column = {};
-   column["field"] = "rateAmountType";
-   column["headerName"] = "Rate Type";
-   column["width"] = 180;
-   column["editable"] = true;
-   column["headerClassName"] = 'mainrow';
-   columns.push(column);
 
-   column = {};
-   column["field"] = "rateAmount";
-   column["headerName"] = "Rate Amount";
-   column["width"] = 180;
-   column["editable"] = true;
-   column["headerClassName"] = 'mainrow'
-   
-  return columns;
-}
+    { field: "firstname", headerName: "First Name", width: 180, editable: true },
+    { field: "lastname", headerName: "Last Name", width: 180, editable: true },
+    { field: "phoneNumber", headerName: "Phone Number", width: 180, editable: true },
+    { field: "location", headerName: "Location", width: 180, editable: true },
+    { field: "coordinates", headerName: "Coordinates", width: 180, editable: true },
+    { field: "perday", headerName: "Per Day", width: 180, editable: true },
+    { field: "persession", headerName: "Per Session", width: 180, editable: true },
+    { field: "fuelRate", headerName: "Fuel Rate", width: 180, editable: true }
+  ]
+
+
+  function EditToolbar(props) {
+    const { setRows, setRowModesModel } = props;
+
+
+
+
+    return (
+      <GridToolbarContainer>
+
+      </GridToolbarContainer>
+    );
+  }
   return (
-    
-    <Box
-      sx={{
-        height: 500,
-        width: '100%',
-        '& .actions': {
-          color: 'text.secondary',
-        },
-        '& .textPrimary': {
-          color: 'text.primary',
-        },
-      }}
-    >
-    
-      <DataGrid
-        rows={initialRows}
-        columns={SetColumns(initialRows[0])}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{ toolbar: EditToolbar }}
-        slotProps={{
-          toolbar: { setRows, setRowModesModel },
-        }}
-        
-      />
-     
-    </Box>
-   
+    <div className='container-fluid'>
+      <Row>
+
+        <Col md={3} >
+          <Row className="p-3">
+            <Col md={4} className="d-flex align-items-center">
+              <Form.Label className='my-3'>First Name</Form.Label>
+            </Col>
+            <Col md={8}>
+              <Form.Control
+                className="form-control-noborder"
+                type="text"
+                name="firstname"
+                rows={3}
+                value={formData.firstname}
+                onChange={(e) => setFormData({
+                  ...formData,
+                  [e.target.name]: e.target.value
+                })}
+              />
+            </Col>
+          </Row>
+        </Col>
+        <Col md={3} >
+          <Row className="p-3">
+            <Col md={4} className="d-flex align-items-center">
+              <Form.Label className='my-3'>Last Name</Form.Label>
+            </Col>
+            <Col md={8}>
+              <Form.Group className="mb-3" controlId="description">
+                <Form.Control
+                  className="form-control-noborder"
+                  type="text"
+                  name="lastname"
+                  rows={3}
+                  value={formData.lastname}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    [e.target.name]: e.target.value
+                  })}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+        </Col>
+        <Col md={3}>
+          <Row className="p-3">
+            <Col md={3} className="d-flex align-items-center">
+              <Form.Label className='my-3'>Phone #</Form.Label>
+            </Col>
+            <Col md={9}>
+              <Form.Control
+                className="form-control-noborder"
+                type="text"
+                name="phoneNumber"
+                rows={3}
+                value={formData.phoneNumber}
+                onChange={(e) => setFormData({
+                  ...formData,
+                  [e.target.name]: e.target.value
+                })}
+              />
+            </Col>
+          </Row>
+        </Col>
+        <Col md={3}>
+          <Row className="p-3">
+            <Col md={3} className="d-flex align-items-center">
+              <Form.Label className='my-3'>Location</Form.Label>
+            </Col>
+            <Col md={9}>
+              <Form.Control
+                className="form-control-noborder"
+                type="text"
+                name="location"
+                rows={3}
+                value={formData.location}
+                onChange={(e) => setFormData({
+                  ...formData,
+                  [e.target.name]: e.target.value
+                })}
+              />
+            </Col>
+          </Row>
+        </Col>
+
+      </Row>
+      <Row>
+
+        <Col md={3}>
+          <Row className="p-3">
+            <Col md={9}>
+              <Form.Check
+                type="checkbox"
+                id="perday"
+                label="Per Day"
+              />
+            </Col>
+          </Row>
+        </Col>
+        <Col md={3}>
+          <Row className="p-3">
+            <Col md={9}>
+              <Form.Check
+                type="checkbox"
+                id="persession"
+                label="Per Session"
+              />
+            </Col>
+          </Row>
+        </Col>
+        <Col md={3}>
+          <Row className="p-3">
+            <Col md={3} className="d-flex align-items-center">
+              <Form.Label className='my-3'>Fuel Rate</Form.Label>
+            </Col>
+            <Col md={9}>
+              <DropDown
+                defaultOption="fuelRate"
+                className="form-control-noborder form-control"
+                id="fuelRate"
+                getAPIData={true}
+                strAPIName="GetIncomeSource"
+                onSelect={(selectedValue) => setFormData({ ...formData, category: selectedValue })}
+              />
+            </Col>
+          </Row>
+        </Col>
+        <Col md={3} >
+          <Button className='search-btn m-3' onClick={() => handleSearch()}><FontAwesomeIcon icon={faSearch} /></Button>
+          <Button className='save-btn' > <FontAwesomeIcon icon={faSave} />  Save </Button>
+        </Col>
+      </Row>
+      <div style={{ height: 500, width: '100%' }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          editMode="row"
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={handleRowModesModelChange}
+          onRowEditStop={handleRowEditStop}
+          processRowUpdate={processRowUpdate}
+          slots={{ toolbar: EditToolbar }}
+          slotProps={{
+            toolbar: { setRows, setRowModesModel }
+          }}
+          getRowClassName={getRowClassName}
+          onProcessRowUpdateError={(error) => console.log(error)}
+          experimentalFeatures={{ newEditingApi: true }}
+          sx={{
+            '& .MuiDataGrid-columnHeaders': {
+              backgroundColor: '#35538894',
+              color: '#fff'
+            },
+          }} />
+      </div>
+    </div>
   );
 }
-export default  TeamDataTable;
+export default TeamDataTable;

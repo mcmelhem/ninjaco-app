@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Row, Accordion } from 'react-bootstrap';
-import IncomeExpensesDataTable from "./IncomeExpensesDataTable";
-import AllPaymentsDataTable from "./AllPaymentsDataTable";
-
+import { Row, Tab, Tabs, Col, Nav } from 'react-bootstrap';
+import IncomeDataTable from "./IncomeDataTable";
+import ExpensesDataTable from "./ExpensesDataTable";
+import CentersPaymentDataTable from "./CentersPaymentDataTable";
+import TeamPaymentDataTable from "./TeamPaymentDataTable";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFileInvoiceDollar, faMoneyBill, faChalkboardTeacher, faUsersLine } from '@fortawesome/free-solid-svg-icons';
+import './payment.scss';
 const Payments = () => {
-    const [activeKey, setActiveKey] = useState(null);
+    const [activeKey, setActiveKey] = useState(['income']);
     const handleSelect = (eventKey) => {
         setActiveKey(eventKey);
     };
@@ -13,37 +17,50 @@ const Payments = () => {
         <div className="container-fluid">
             <Row className="h-100">
                 <div className='wrapper-content h-100 p-0'>
-                    <Accordion className='p-0'
-                        defaultActiveKey={0}
-                        alwaysOpen
+                    <Tabs
+                        id="controlled-tab-example"
                         activeKey={activeKey}
-                        onSelect={handleSelect}>
-                        <Accordion.Item eventKey="0"  >
-                            <Accordion.Header>Income</Accordion.Header>
-                            <Accordion.Body>
+                        onSelect={handleSelect}
+                        className="m-1 ms-2 payment-tabs"
 
-                                {activeKey == "0" &&     <IncomeExpensesDataTable blnIncome={true}></IncomeExpensesDataTable>}
+                    >
+                        <Tab eventKey="income" title={
+                            <>
+                                <FontAwesomeIcon icon={faFileInvoiceDollar} className='me-1' />
+                                Income
+                            </>
+                        }>
+                            {activeKey.includes("income") && <IncomeDataTable blnIncome={true}></IncomeDataTable>}
+                        </Tab>
+                        <Tab eventKey="expenses" title={
+                            <>
+                                <FontAwesomeIcon icon={faMoneyBill} className='me-1' />
+                                Expenses
+                            </>
+                        }>
+                            {activeKey.includes("expenses") && <ExpensesDataTable blnIncome={false}></ExpensesDataTable>}
+                        </Tab>
+                        <Tab eventKey="centers" title={
+                            <>
+                                <FontAwesomeIcon icon={faChalkboardTeacher} className='me-1' />
+                                Centers
+                            </>
+                        }>
+                            {activeKey.includes("centers") && <CentersPaymentDataTable></CentersPaymentDataTable>}
+                        </Tab>
+                        <Tab eventKey="teamPayment"
+                            title={
+                                <>
+                                    <FontAwesomeIcon icon={faUsersLine} className='me-1' />
+                                    Team
+                                </>
+                            }>
+                            {activeKey.includes("teamPayment") && <TeamPaymentDataTable></TeamPaymentDataTable>}
+                        </Tab>
+                    </Tabs>
 
-                            </Accordion.Body>
-                        </Accordion.Item>
-                        <Accordion.Item eventKey="1"  >
-                            <Accordion.Header>Expenses</Accordion.Header>
-                            <Accordion.Body>
-
-                            {activeKey == "1" &&     <IncomeExpensesDataTable blnIncome={false}></IncomeExpensesDataTable>}
-
-                            </Accordion.Body>
-                        </Accordion.Item >
-                        <Accordion.Item eventKey="2" >
-                            <Accordion.Header>Centers Payments</Accordion.Header>
-                            <Accordion.Body>
-
-                            {activeKey == "2" &&     <AllPaymentsDataTable></AllPaymentsDataTable>}
-                            </Accordion.Body>
-                        </Accordion.Item>
-
-                    </Accordion>
                 </div>
+
             </Row>
         </div>
     );

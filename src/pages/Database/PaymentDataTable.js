@@ -7,63 +7,44 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faPen, faTrash, faSave, faCancel } from '@fortawesome/free-solid-svg-icons';
 import { GridRowModes, DataGrid, GridToolbarContainer, GridActionsCellItem, GridRowEditStopReasons } from '@mui/x-data-grid';
 
-var incomeData = [
+
+const initialRows = [
   {
-    "id": 1,
-    "description": "Payment for session 1",
-    "date": "2025-02-10",
-    "source": "Session for Kid",
-    "incomeValue": "$100"
+    id: 1,
+    name: 'Test1',
+    age: 25,
+    joinDate: new Date(),
+    role: 'Market'
   },
   {
-    "id": 2,
-    "description": "Payment for session 2",
-    "date": "2025-02-12",
-    "source": "Innovative Learning Hub (Center)",
-    "incomeValue": "$250"
+    id: 2,
+    name: 'Test2',
+    age: 36,
+    joinDate: new Date(),
+    role: 'Market'
   },
   {
-    "id": 3,
-    "description": "Payment for workshop",
-    "date": "2025-02-14",
-    "source": "Session for Kid",
-    "incomeValue": "$150"
-  }
+    id: 3,
+    name: 'Test3',
+    age: 19,
+    joinDate: new Date(),
+    role: 'Market'
+  },
+  {
+    id: 4,
+    name: 'Test4',
+    age: 28,
+    joinDate: new Date(),
+    role: 'Market'
+  },
+  {
+    id: 5,
+    name: 'Test5',
+    age: 23,
+    joinDate: new Date(),
+    role: 'Market'
+  },
 ];
-var expensesData = [
-  {
-    "id": 1,
-    "description": "Office maintenance",
-    "date": "2025-02-10",
-    "source": "Maintenance",
-    "expenseValue": "$150"
-  },
-  {
-    "id": 2,
-    "description": "Salary for instructor (John Doe)",
-    "date": "2025-02-12",
-    "source": "Salary for Instructor",
-    "expenseValue": "$2000"
-  },
-  {
-    "id": 3,
-    "description": "Materials for coding course",
-    "date": "2025-02-14",
-    "source": "Materials",
-    "expenseValue": "$300"
-  },
-  {
-    "id": 4,
-    "description": "Office maintenance",
-    "date": "2025-02-15",
-    "source": "Maintenance",
-    "expenseValue": "$180"
-  }
-];
-
-
-
-
 
 function EditToolbar(props) {
   const { setRows, setRowModesModel } = props;
@@ -88,7 +69,7 @@ function EditToolbar(props) {
     </GridToolbarContainer>
   );
 }
-const IncomeExpensesDataTable = ({ id, getAPIData, strAPIName, blnIncome }) => {
+const DataTable = ({ id, getAPIData, strAPIName }) => {
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
 
@@ -154,12 +135,32 @@ const IncomeExpensesDataTable = ({ id, getAPIData, strAPIName, blnIncome }) => {
   };
 
 
-  function SetColumns() {
-    const incomeColumns = [];
-    const expenseColumns = [];
-
-    console.log(blnIncome)
-
+  function SetColumns(jsonRow) {
+    const columns = [];
+     const handleAddClick = () => {
+        const maxId = Math.max(...rows.map(row => row.id), 0);
+        const newId = maxId + 1;
+        const newRow = {
+          "firstName": "",
+          "lastName": "",
+          "phoneNumber": "",
+          "location": "",
+          "coordinates": "",
+          "perday": "",
+          "persession": "",
+          "fuelRate": " ",
+          "id": newId,
+          "isNew": true
+        };
+        setRows((oldRows) => [
+          ...oldRows,
+          newRow,
+        ]);
+        setRowModesModel((oldModel) => ({
+          ...oldModel,
+          [newId]: { mode: GridRowModes.Edit, fieldToFocus: 'firstName' },
+        }));
+      };
     var actionsColumn = {
       field: 'actions',
       type: 'actions',
@@ -173,15 +174,13 @@ const IncomeExpensesDataTable = ({ id, getAPIData, strAPIName, blnIncome }) => {
             <GridActionsCellItem
               icon={<FontAwesomeIcon icon={faSave} />}
               label="Save"
-              sx={{
-                color: 'primary.main',
-              }}
+              className="grid-btn"
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
               icon={<FontAwesomeIcon icon={faCancel} />}
               label="Cancel"
-              className="textPrimary"
+              className="grid-btn"
               onClick={handleCancelClick(id)}
               color="inherit"
             />,
@@ -192,130 +191,56 @@ const IncomeExpensesDataTable = ({ id, getAPIData, strAPIName, blnIncome }) => {
           <GridActionsCellItem
             icon={<FontAwesomeIcon icon={faPen} />}
             label="Edit"
-            className="textPrimary"
+            className="grid-btn"
             onClick={handleEditClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem
             icon={<FontAwesomeIcon icon={faTrash} />}
             label="Delete"
+            className="grid-btn"
             onClick={handleDeleteClick(id)}
             color="inherit"
           />,
         ];
       },
     }
-    actionsColumn["headerClassName"] = 'mainrow';
-    var column = {};
-  /*  column["field"] = "id";
-    column["headerName"] = "ID";
-    column["width"] = 100;
-    column["editable"] = false;
-    column["headerClassName"] = 'mainrow';
-    incomeColumns.push(column);*/
+    const addCol = {
+      field: 'add',
+      type: 'add',
+      headerName: '',
+      width: 100,
+      renderHeader: () => (
+        <Button className='add-row-btn p-1' title='Add' onClick={handleAddClick}><FontAwesomeIcon icon={faPlus} /></Button>
+      ),
+      filterable: false,
+      disableColumnMenu: true,
+      sortable: false,
 
-    column = {};
-    column["field"] = "description";
-    column["headerName"] = "Description";
-    column["width"] = 250;
-    column["editable"] = true;
-    column["headerClassName"] = 'mainrow';
-    incomeColumns.push(column);
+    }
+    columns.push(addCol);
+    columns.push(actionsColumn);
+    for (let key in jsonRow) {
+      var column = {};
+      if (key != "id") {
+        column["field"] = key;
+        column["headerName"] = key;
+        column["width"] = 150;
+        column["editable"] = true;
+        columns.push(column);
+      }
 
-    column = {};
-    column["field"] = "date";
-    column["headerName"] = "Date";
-    column["width"] = 180;
-    column["editable"] = true;
-    column["headerClassName"] = 'mainrow';
-    incomeColumns.push(column);
-
-    column = {};
-    column["field"] = "source";
-    column["headerName"] = "Source";
-    column["width"] = 200;
-    column["editable"] = true;
-    column["headerClassName"] = 'mainrow';
-    incomeColumns.push(column);
-
-    column = {};
-    column["field"] = "incomeValue";
-    column["headerName"] = "Income Value";
-    column["width"] = 180;
-    column["editable"] = true;
-    column["headerClassName"] = 'mainrow';
-    incomeColumns.push(column);
-
-
-    // expenses
-    var column = {};
- /*   column["field"] = "id";
-    column["headerName"] = "ID";
-    column["width"] = 100;
-    column["editable"] = false;
-    column["headerClassName"] = 'mainrow';
-    expenseColumns.push(column);*/
-
-
-    column = {};
-    column["field"] = "description";
-    column["headerName"] = "Description";
-    column["width"] = 250;
-    column["editable"] = true;
-    column["headerClassName"] = 'mainrow';
-    expenseColumns.push(column);
-
-
-    column = {};
-    column["field"] = "date";
-    column["headerName"] = "Date";
-    column["width"] = 180;
-    column["editable"] = true;
-    column["headerClassName"] = 'mainrow';
-    expenseColumns.push(column);
-
-
-    column = {};
-    column["field"] = "source";
-    column["headerName"] = "Source";
-    column["width"] = 200;
-    column["editable"] = true;
-    column["headerClassName"] = 'mainrow';
-    expenseColumns.push(column);
-
-
-    column = {};
-    column["field"] = "expenseValue";
-    column["headerName"] = "Expense Value";
-    column["width"] = 180;
-    column["editable"] = true;
-    column["headerClassName"] = 'mainrow';
-    expenseColumns.push(column);
-    if (blnIncome == true) {
-      return incomeColumns
-    } else {
-      return expenseColumns;
     }
 
+   
+
+    return columns;
   }
   return (
-
-    <Box
-      sx={{
-        height: 500,
-        width: '100%',
-        '& .actions': {
-          color: 'text.secondary',
-        },
-        '& .textPrimary': {
-          color: 'text.primary',
-        },
-      }}
-    >
-
+    <div style={{ height: 300, width: '100%' }}>
       <DataGrid
-        rows={blnIncome ? incomeData : expensesData}
-        columns={SetColumns()}
+        rows={rows}
+        columns={SetColumns(rows[0])}
         editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
@@ -325,11 +250,8 @@ const IncomeExpensesDataTable = ({ id, getAPIData, strAPIName, blnIncome }) => {
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-
-      />
-
-    </Box>
-
+        showToolbar />
+    </div>
   );
 }
-export default IncomeExpensesDataTable;
+export default DataTable;

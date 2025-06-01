@@ -3,11 +3,10 @@ import axios from "axios";
 import { Form } from 'react-bootstrap';
 import { API_BASE_URL, ACCESS_TOKEN_NAME } from '../../constants/constants';
 
-const DropDown = ({ id, getAPIData, strAPIName, className, defaultOption }) => {
+const DropDown = ({ id, getAPIData = false, strAPIName = "", className, defaultOption, arxData = [], onSelect }) => {
   const [data, setData] = useState([]);
   useEffect(() => {
-    console.log(getAPIData, defaultOption)
-    if (getAPIData) {
+    if (getAPIData == true) {
       const token = localStorage.getItem("loggedinUser");
       axios.get(API_BASE_URL + '/api/' + strAPIName, {
         headers: {
@@ -29,19 +28,24 @@ const DropDown = ({ id, getAPIData, strAPIName, className, defaultOption }) => {
           console.error("Error fetching user", error);
         });
     } else {
-      setData([{ id: -1, name: defaultOption }]);
+      setData(arxData);
+
     }
   }, [getAPIData, strAPIName]);
 
+  const handleSelectChange = (event) => {
+    const selectedItem = data.find(item => item.id === parseInt(event.target.value));
+    onSelect(selectedItem);
+  };
 
   return (
-    <Form.Select aria-label="dropdown" id={id} className={`${className}`}>
-      {CreateDropdownOptions(data)}
+    <Form.Select aria-label="dropdown" id={id} className={`${className}`}   onChange={handleSelectChange}>
+      {CreateDropdownOptions(data)} 
     </Form.Select>
   );
   function CreateDropdownOptions(data) {
     return data.map((obj) => (
-      <option key={obj.id} value={obj.name}>
+      <option key={obj.id} value={obj.id}>
         {obj.name}
       </option>
     ));

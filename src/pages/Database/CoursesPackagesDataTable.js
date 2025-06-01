@@ -7,56 +7,46 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faPen, faTrash, faSave, faCancel } from '@fortawesome/free-solid-svg-icons';
 import { GridRowModes, DataGrid, GridToolbarContainer, GridActionsCellItem, GridRowEditStopReasons } from '@mui/x-data-grid';
 
-
+import './database.scss';
 var courseData = [
- 
+
   {
     "id": 1,
     "courseName": "Wedo",
-    "#SessionsPackage": 10,
+    "sessionsPerPackage": "10",
     "packagePrice": "$220"
   },
   {
     "id": 2,
-    "courseName": "EV3",
-    "#SessionsPackage": 12,
-    "packagePrice": "$350"
+    "courseName": "Wedo",
+    "sessionsPerPackage": "5",
+    "packagePrice": "$120"
   },
   {
     "id": 3,
+    "courseName": "EV3",
+    "sessionsPerPackage": "12",
+    "packagePrice": "$350"
+  },
+  {
+    "id": 4,
+    "courseName": "EV3",
+    "sessionsPerPackage": "5",
+    "packagePrice": "$250"
+  },
+  {
+    "id": 5,
     "courseName": "Coding for Beginners",
-    "#SessionsPackage": 16,
+    "sessionsPerPackage": "4",
     "packagePrice": "$450"
   }
 ];
 
 
 
-function EditToolbar(props) {
-  const { setRows, setRowModesModel } = props;
 
-  const handleClick = () => {
-    const id = 1;
-    setRows((oldRows) => [
-      ...oldRows,
-      { id, name: '', age: '', role: '', isNew: true },
-    ]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-    }));
-  };
-
-  return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<FontAwesomeIcon icon={faPlus} />} onClick={handleClick}>
-        Add record
-      </Button>
-    </GridToolbarContainer>
-  );
-}
 const CoursesPackages = ({ id, getAPIData, strAPIName }) => {
-  const [rows, setRows] = useState([]);
+  const [rows, setRows] = useState(courseData);
   const [rowModesModel, setRowModesModel] = React.useState({});
 
   useEffect(() => {
@@ -119,15 +109,50 @@ const CoursesPackages = ({ id, getAPIData, strAPIName }) => {
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
+  const handleAddClick = () => {
+    const maxId = Math.max(...rows.map(row => row.id), 0);
+    const newId = maxId + 1;
+    const newRow = {
+      "centerName": "",
+      "firstName": "",
+      "lastName": "",
+      "phone": "",
+      "location": "",
+      "type": "",
+      "paymentType": " ",
+      "id": newId,
+      "isNew": true
+    };
+    setRows((oldRows) => [
+      ...oldRows,
+      newRow,
+    ]);
+    setRowModesModel((oldModel) => ({
+      ...oldModel,
+      [newId]: { mode: GridRowModes.Edit, fieldToFocus: 'courseName' },
+    }));
+  };
 
 
-  function SetColumns(jsonRow) {
-    const columns = [];
-    var actionsColumn = {
+  const columns = [
+    {
+      field: 'add',
+      type: 'add',
+      headerName: '',
+
+      renderHeader: () => (
+        <Button className='add-row-btn p-1' title='Add' onClick={handleAddClick}><FontAwesomeIcon icon={faPlus} /></Button>
+      ),
+      filterable: false,
+      disableColumnMenu: true,
+      sortable: false,
+
+    },
+    {
       field: 'actions',
       type: 'actions',
       headerName: 'Actions',
-      width: 100,
+
       cellClassName: 'actions',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
@@ -136,17 +161,14 @@ const CoursesPackages = ({ id, getAPIData, strAPIName }) => {
             <GridActionsCellItem
               icon={<FontAwesomeIcon icon={faSave} />}
               label="Save"
-              sx={{
-                color: 'primary.main',
-              }}
+              className="grid-btn"
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
               icon={<FontAwesomeIcon icon={faCancel} />}
               label="Cancel"
-              className="textPrimary"
+              className="grid-btn"
               onClick={handleCancelClick(id)}
-              color="inherit"
             />,
           ];
         }
@@ -167,49 +189,28 @@ const CoursesPackages = ({ id, getAPIData, strAPIName }) => {
           />,
         ];
       },
-    }
-    actionsColumn["headerClassName"] = 'mainrow';
+    },
+
+    { field: "courseName", headerName: "Course Name",flex:1, editable: true },
+    { field: "sessionsPerPackage", headerName: "NB Sessions Per Package", flex:1, editable: true },
+    { field: "packagePrice", headerName: "Package Price", flex:1, editable: true },
 
 
-    var column = {};
-   /* column["field"] = "id";
-    column["headerName"] = "ID";
-    column["width"] = 100;
-    column["editable"] = false;
-    column["headerClassName"] = 'mainrow';
-    columns.push(column);*/
-    
-    column = {};
-    column["field"] = "courseName";
-    column["headerName"] = "Course Name";
-    column["width"] = 200;
-    column["editable"] = true;
-    column["headerClassName"] = 'mainrow';
-    columns.push(column);
-    column = {};
-    column["field"] = "#SessionsPackage";
-    column["headerName"] = "# Sessions/Package";
-    column["width"] = 180;
-    column["editable"] = true;
-    column["headerClassName"] = 'mainrow';
-    columns.push(column);
-    
-    column = {};
-    column["field"] = "packagePrice";
-    column["headerName"] = "Package Price";
-    column["width"] = 180;
-    column["editable"] = true;
-    column["headerClassName"] = 'mainrow';
-    columns.push(column);
-    
-    console.log(columns);
-    
-    
+  ]
 
-    return columns;
+
+  function EditToolbar(props) {
+    const { setRows, setRowModesModel } = props;
+
+
+
+    return (
+      <GridToolbarContainer>
+
+      </GridToolbarContainer>
+    );
   }
   return (
-
     <Box
       sx={{
         height: 500,
@@ -222,10 +223,9 @@ const CoursesPackages = ({ id, getAPIData, strAPIName }) => {
         },
       }}
     >
-
       <DataGrid
-        rows={courseData}
-        columns={SetColumns(courseData[0])}
+        rows={rows}
+        columns={columns}
         editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
@@ -235,11 +235,15 @@ const CoursesPackages = ({ id, getAPIData, strAPIName }) => {
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-
-      />
-
+        experimentalFeatures={{ newEditingApi: true }}
+          sx={{
+            '& .MuiDataGrid-columnHeaders': {
+              backgroundColor: '#35538894',
+              color: '#fff'
+            },
+          }}
+           />
     </Box>
-
   );
 }
 export default CoursesPackages;

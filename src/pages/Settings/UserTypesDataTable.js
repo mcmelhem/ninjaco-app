@@ -6,8 +6,9 @@ import Button from '@mui/material/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faPen, faTrash, faSave, faCancel } from '@fortawesome/free-solid-svg-icons';
 import { GridRowModes, DataGrid, GridToolbarContainer, GridActionsCellItem, GridRowEditStopReasons } from '@mui/x-data-grid';
+import { Col, Container, Row, Form } from 'react-bootstrap';
 
-var initialRows = [
+var rows = [
   {
     "id": 1,
     "userName": "Jad Daoud",
@@ -25,7 +26,13 @@ var initialRows = [
   }
 ];
 
-
+const menuItems = [
+  { id: 'attendance', label: 'Attendance' },
+  { id: 'schedule', label: 'Schedule' },
+  { id: 'students', label: 'Students' },
+  { id: 'database', label: 'Database' },
+  { id: 'payments', label: 'Payments' },
+];
 
 function EditToolbar(props) {
   const { setRows, setRowModesModel } = props;
@@ -54,7 +61,7 @@ const UserTypesDataTable = ({ id, getAPIData, strAPIName }) => {
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (getAPIData == true) {
       const token = localStorage.getItem("loggedinUser");
       axios.get(API_BASE_URL + '/api/' + strAPIName, {
@@ -73,7 +80,7 @@ const UserTypesDataTable = ({ id, getAPIData, strAPIName }) => {
           console.error("Error fetching user", error);
         });
     }
-  }, []);
+  }, []);*/
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -115,14 +122,12 @@ const UserTypesDataTable = ({ id, getAPIData, strAPIName }) => {
     setRowModesModel(newRowModesModel);
   };
 
-
-  function SetColumns(jsonRow) {
-    const columns = [];
-    var actionsColumn = {
+  const columns = [
+    {
       field: 'actions',
       type: 'actions',
       headerName: 'Actions',
-      width: 100,
+      width: 120,
       cellClassName: 'actions',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
@@ -131,17 +136,14 @@ const UserTypesDataTable = ({ id, getAPIData, strAPIName }) => {
             <GridActionsCellItem
               icon={<FontAwesomeIcon icon={faSave} />}
               label="Save"
-              sx={{
-                color: 'primary.main',
-              }}
+              className="grid-btn"
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
               icon={<FontAwesomeIcon icon={faCancel} />}
               label="Cancel"
-              className="textPrimary"
+              className="grid-btn"
               onClick={handleCancelClick(id)}
-              color="inherit"
             />,
           ];
         }
@@ -150,81 +152,100 @@ const UserTypesDataTable = ({ id, getAPIData, strAPIName }) => {
           <GridActionsCellItem
             icon={<FontAwesomeIcon icon={faPen} />}
             label="Edit"
-            className="textPrimary"
+            className="grid-btn"
             onClick={handleEditClick(id)}
-            color="inherit"
           />,
           <GridActionsCellItem
             icon={<FontAwesomeIcon icon={faTrash} />}
             label="Delete"
+            className="grid-btn"
             onClick={handleDeleteClick(id)}
-            color="inherit"
           />,
         ];
+
       },
-    }
-    actionsColumn["headerClassName"] = 'mainrow';
-    columns.push(actionsColumn);
-
-    var column = {};
-  /*  column["field"] = "id";
-    column["headerName"] = "ID";
-    column["width"] = 100;
-    column["editable"] = false;
-    column["headerClassName"] = 'mainrow';
-    columns.push(column);*/
-
-    column = {};
-    column["field"] = "userName";
-    column["headerName"] = "User Name";
-    column["width"] = 250;
-    column["editable"] = true;
-    column["headerClassName"] = 'mainrow';
-    columns.push(column);
-
-    column = {};
-    column["field"] = "userType";
-    column["headerName"] = "User Type";
-    column["width"] = 180;
-    column["editable"] = true;
-    column["headerClassName"] = 'mainrow';
-    columns.push(column);
+    },
+    { field: "id", hide: true },
+    { field: "userName", headerName: "User Name", width: 180, editable: true, type: 'text' },
+    { field: "userType", headerName: "User Type", editable: true, type: 'text' },
+  ];
 
 
-    return columns;
-  }
+
   return (
+    <Container>
+      <Row>
+        <Col sm={8} lg={7} className='p-0'>
 
-    <Box
-      sx={{
-        height: 400,
-        width: '100%',
-        '& .actions': {
-          color: 'text.secondary',
-        },
-        '& .textPrimary': {
-          color: 'text.primary',
-        },
-      }}
-    >
 
-      <DataGrid
-        rows={initialRows}
-        columns={SetColumns(initialRows[0])}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{ toolbar: EditToolbar }}
-        slotProps={{
-          toolbar: { setRows, setRowModesModel },
-        }}
+          <Box
+            sx={{
+              height: 400,
+              width: '100%',
+              '& .actions': {
+                color: 'text.secondary',
+              },
+              '& .textPrimary': {
+                color: 'text.primary',
+              },
+            }}
+          >
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              editMode="row"
+              rowModesModel={rowModesModel}
+              onRowModesModelChange={handleRowModesModelChange}
+              onRowEditStop={handleRowEditStop}
+              processRowUpdate={processRowUpdate}
+              slots={{ toolbar: EditToolbar }}
 
-      />
+              slotProps={{
+                toolbar: { setRows, setRowModesModel }
+              }}
 
-    </Box>
+              experimentalFeatures={{ newEditingApi: true }}
+              sx={{
+                '& .MuiDataGrid-columnHeaders': {
+                  backgroundColor: '#35538894',
+                  color: '#fff'
+                },
+              }}
+              showToolbar />
 
+          </Box>
+        </Col>
+        <Col sm={4} lg={5} className='p-0' id='granted-MenuAccess'>
+
+          <div  className='m-3 menu-items' >
+                <Form >
+                  {menuItems.map((item) => (
+                    <Form.Group key={item.id} controlId={item.id}>
+
+                      <Form.Check className='my-3'
+                        type="checkbox"
+                        label={`${item.label}`}
+                        name={item.id}
+                      /* checked={formData[item.id]}
+                       onChange={handleChange}*/
+                      />
+                    </Form.Group>
+                  ))}
+                </Form>
+           
+              <Col md={2}>
+                <button className='btn-add btn mx-1 ms-2 save-btn save-btn-float'>
+                  <FontAwesomeIcon icon={faSave} /> Save
+                </button>
+              </Col>
+
+        
+
+          </div>
+        </Col>
+
+      </Row>
+    </Container >
   );
 }
 export default UserTypesDataTable;

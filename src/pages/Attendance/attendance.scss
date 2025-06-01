@@ -54,3 +54,21 @@
 	list-style-type: none;
 	padding: 0px;
 }
+.section-div{
+	background-color: $main-color;
+	color: white;
+	padding: 4px;
+	border-radius: 5px;
+	width: fit-content;
+}
+.section-div  .form-check-input:checked {
+    background-color: grey !important;
+    border-color: #0d6efd;
+	color: white;
+}
+.btn-addpayment{
+	font-size: 12px;
+	background-color: $main-color;
+	color: white;
+
+}

@@ -5,22 +5,20 @@ import { NavLink, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Nav, Navbar } from 'react-bootstrap';
 import axios from "axios";
+import { useAuth } from "../../hooks/AuthProvider";
 import { API_BASE_URL, ACCESS_TOKEN_NAME } from '../../constants/constants';
 import "./navbar.scss";
 
 const CustomNavbar = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showNavBar, setshowNavbar] = useState(true);
+  const [showNavBar, setShowNavbar] = useState(true);
   const [error, setError] = useState(null);
   const token = localStorage.getItem("loggedinUser");
-  const location = useLocation()
+  const auth = useAuth();
+
   useEffect(() => {
-    if (location.pathname === '/login') {
-      setLoading(false);
-      setshowNavbar(false);
-      return;
-    } else {
+   
       axios.get(API_BASE_URL + '/api/getMenuItems',
         {
           headers: {
@@ -42,7 +40,7 @@ const CustomNavbar = () => {
           setError(err.message);
           setLoading(false);
         });
-    }
+    
   }, []);
 
   if (loading) {
@@ -63,7 +61,7 @@ const CustomNavbar = () => {
             {menuItems.map(item => (
               <NavLink key={item.id} to={"/" + item.name.toLowerCase()} className='nav-item nav-link' >{item.name}</NavLink>
             ))}
-            <NavLink to={"/signout"} className='nav-item nav-link nav-link-signout' >Sign Out</NavLink>
+            <NavLink to={"/signout"} className='nav-item nav-link nav-link-signout' onClick={() => auth.logOut()} >Sign Out</NavLink>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
